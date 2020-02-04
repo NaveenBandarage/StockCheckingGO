@@ -22,13 +22,16 @@ type StockInfo struct {
 type Stocks []StockInfo
 
 func main() {
+	j := 0
+	stocks := [6]string{"AAPL", "TSLA", "GOOGL", "AMZN", "NFLX", "FB"}
+	stockName := stocks[j]
 	scanner := bufio.NewScanner(os.Stdin)
 
-	fmt.Print("Enter Text: ")
-	// Scans a line from Stdin(Console)
-	scanner.Scan()
-	// Holds the string that scanned
-	stockName := scanner.Text()
+	// fmt.Print("Enter Text: ")
+	// // Scans a line from Stdin(Console)
+	// scanner.Scan()
+	// // Holds the string that scanned
+	// stockName := scanner.Text()
 	fmt.Println("Checking for: ", stockName)
 	//sleep time gotta go to work tomorrow will continue on this
 	stockSymbol := "&symbols="
@@ -39,10 +42,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	base := "https://sandbox.iexapis.com/stable/tops?token="
+	base := "https://cloud.iexapis.com/stable/tops?token="
 
 	i := 0
 	for {
+		stockName := stocks[j]
 		response, err := http.Get(base + string(apiKey) + stockSymbol + stockName)
 
 		if err != nil {
@@ -74,12 +78,19 @@ func main() {
 			// Holds the string that scanned
 			text := scanner.Text()
 			if text == "Y" {
-				fmt.Println("Okay do you want to check a new stock?")
-				fmt.Print("Enter stock name: ")
-				scanner.Scan()
-				// Holds the string that scanned
-				text := scanner.Text()
-				stockName = text
+				if j == 6 {
+					j = 0
+				} else {
+					fmt.Println("Checking for: ", stocks[j+1])
+					j++
+
+				}
+				// fmt.Println("Okay do you want to check a new stock?")
+				// fmt.Print("Enter stock name: ")
+				// scanner.Scan()
+				// // Holds the string that scanned
+				// text := scanner.Text()
+				// stockName = text
 				i = 0
 			} else {
 				fmt.Println("Okay do you want to keep going with", stockName, "?")
@@ -94,6 +105,7 @@ func main() {
 					break
 				}
 			}
+
 		}
 	}
 }
