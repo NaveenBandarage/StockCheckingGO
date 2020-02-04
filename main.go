@@ -9,18 +9,14 @@ import (
 	"os"
 )
 
-//Struct for testing response
-type Response struct {
-	Symbol        string  `json:"symbol"`
-	LastSalePrice float32 `json:"lastSalePrice"`
-} //my brain is so gone bruh
-
-type Post struct {
+//Structure for the stuct.
+type StockInfo struct {
 	Symbol        string  `json:"symbol"`
 	LastSalePrice float32 `json:"lastSalePrice"`
 }
 
-type Posts []Post
+//Structure fot the stock info.
+type Stocks []StockInfo
 
 func main() {
 	stockName := "&symbols=aapl"
@@ -44,13 +40,13 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println(string(responseData))
-	var posts Posts
+	var stockVar Stocks
 
-	jsonFile := json.Unmarshal([]byte(responseData), &posts)
+	jsonFile := json.Unmarshal([]byte(responseData), &stockVar)
 
 	if jsonFile != nil {
 		fmt.Println("error:", jsonFile)
 	}
-	fmt.Println(posts[0].Symbol)
+	fmt.Println(stockVar[0].Symbol, stockVar[0].LastSalePrice)
 
 }
