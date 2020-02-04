@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 //Structure for the stuct.
@@ -27,10 +28,10 @@ func main() {
 	// Scans a line from Stdin(Console)
 	scanner.Scan()
 	// Holds the string that scanned
-	text := scanner.Text()
-	fmt.Println(text)
-
-	stockName := "&symbols=aapl"
+	stockName := scanner.Text()
+	fmt.Println("Checking for: ", stockName)
+	//sleep time gotta go to work tomorrow will continue on this
+	stockSymbol := "&symbols="
 
 	apiKey, err := ioutil.ReadFile("api.txt")
 	if err != nil {
@@ -39,8 +40,10 @@ func main() {
 	}
 
 	base := "https://sandbox.iexapis.com/stable/tops?token="
-	for i := 1; i <= 10; i++ {
-		response, err := http.Get(base + string(apiKey) + stockName)
+
+	i := 0
+	for {
+		response, err := http.Get(base + string(apiKey) + stockSymbol + stockName)
 
 		if err != nil {
 			fmt.Print(err.Error())
@@ -51,6 +54,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		//fmt.Println(string(responseData))
 		var stockVar Stocks
 
@@ -61,5 +65,35 @@ func main() {
 		}
 
 		fmt.Println(stockVar[0].Symbol, stockVar[0].LastSalePrice, stockVar[0].LastUpdated)
+		time.Sleep(time.Millisecond * 10)
+		i++
+		if i == 10 {
+			fmt.Println("Pausing Stock Checking atm. Do you want to check a new stock?")
+			fmt.Print("Enter Text (Y/N): ")
+			scanner.Scan()
+			// Holds the string that scanned
+			text := scanner.Text()
+			if text == "Y" {
+				fmt.Println("Okay do you want to check a new stock?")
+				fmt.Print("Enter stock name: ")
+				scanner.Scan()
+				// Holds the string that scanned
+				text := scanner.Text()
+				stockName = text
+				i = 0
+			} else {
+				fmt.Println("Okay do you want to keep going with", stockName, "?")
+				fmt.Print("Enter Text (Y/N): ")
+				scanner.Scan()
+				text := scanner.Text()
+				if text == "Y" {
+					fmt.Println("Okay we will keep moving!")
+					i = 0
+				} else {
+					fmt.Println("Exiting stock checker!")
+					break
+				}
+			}
+		}
 	}
 }
