@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -20,6 +21,14 @@ type StockInfo struct {
 type Stocks []StockInfo
 
 func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+
+	fmt.Print("Enter Text: ")
+	// Scans a line from Stdin(Console)
+	scanner.Scan()
+	// Holds the string that scanned
+	text := scanner.Text()
+	fmt.Println(text)
 
 	stockName := "&symbols=aapl"
 
