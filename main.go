@@ -22,19 +22,18 @@ type StockInfo struct {
 type Stocks []StockInfo
 
 func main() {
+	//for incrementing the stocks array
 	j := 0
+
+	//array containing all of the stocks that i want to check.
 	stocks := [11]string{"AAPL", "TSLA", "GOOGL", "AMZN", "NFLX", "FB", "NIO", "BYD", "ACB", "AMD", "SPOT"}
 	stockName := stocks[j]
-	// scanner := bufio.NewScanner(os.Stdin)
 
-	// fmt.Print("Enter Text: ")
-	// // Scans a line from Stdin(Console)
-	// scanner.Scan()
-	// // Holds the string that scanned
-	// stockName := scanner.Text()
-	fmt.Println("Checking for: ", stockName)
-	//sleep time gotta go to work tomorrow will continue on this
+	fmt.Println("Checking for:", stockName)
+
+	//Constructing the request url
 	stockSymbol := "&symbols="
+	base := "https://cloud.iexapis.com/stable/tops?token="
 
 	apiKey, err := ioutil.ReadFile("api.txt")
 	if err != nil {
@@ -42,11 +41,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	base := "https://cloud.iexapis.com/stable/tops?token="
-
+	//for iterating through a stock.
 	i := 0
+
+	//infinte loop that goes through until a condition met that breaks the loop
 	for {
-		stockName := stocks[j]
+		stockName := stocks[j] //getting the stockName from the stocks
 		response, err := http.Get(base + string(apiKey) + stockSymbol + stockName)
 
 		if err != nil {
@@ -72,40 +72,15 @@ func main() {
 		time.Sleep(time.Millisecond * 10)
 		i++
 		if i == 10 {
-			// fmt.Println("Pausing Stock Checking atm. Do you want to check a new stock?")
-			// fmt.Print("Enter Text (Y/N): ")
-			// scanner.Scan()
-			// // Holds the string that scanned
-			// text := scanner.Text()
-			// if text == "Y" {
 			if j == 10 {
 				j = 0
 				fmt.Println("Exiting stock checker!")
-
 				break
 			} else {
 				fmt.Println("Checking for: ", stocks[j+1])
 				j++
 			}
-			// fmt.Println("Okay do you want to check a new stock?")
-			// fmt.Print("Enter stock name: ")
-			// scanner.Scan()
-			// // Holds the string that scanned
-			// text := scanner.Text()
-			// stockName = text
 			i = 0
-			// } else {
-			// 	fmt.Println("Okay do you want to keep going with", stockName, "?")
-			// 	fmt.Print("Enter Text (Y/N): ")
-			// 	scanner.Scan()
-			// 	text := scanner.Text()
-			// 	if text == "Y" {
-			// 		fmt.Println("Okay we will keep moving!")
-			// 		i = 0
-			// 	} else {
-			// 		fmt.Println("Exiting stock checker!")
-			// 		break
-			// 	}
 		}
 
 	}
