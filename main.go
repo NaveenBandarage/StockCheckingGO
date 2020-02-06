@@ -31,7 +31,7 @@ func main() {
 
 	fmt.Println("Checking for:", stockName)
 
-	//Constructing the request url
+	// Constructing the request url
 	stockSymbol := "&symbols="
 	base := "https://cloud.iexapis.com/stable/tops?token="
 
@@ -46,13 +46,17 @@ func main() {
 
 	//infinte loop that goes through until a condition met that breaks the loop
 	for {
-		stockName := stocks[j] //getting the stockName from the stocks
+		//
+		// stockName := stocks[j] //getting the stockName from the stocks
 		response, err := http.Get(base + string(apiKey) + stockSymbol + stockName)
+		//
 
+		//response, err := http.Get("https://cloud.iexapis.com/stable/tops?token=sk_1679b02c02f245278e2ddf3daaa49b4f")
 		if err != nil {
 			fmt.Print(err.Error())
 			os.Exit(1)
 		}
+		defer response.Body.Close()
 
 		responseData, err := ioutil.ReadAll(response.Body)
 		if err != nil {
@@ -67,9 +71,9 @@ func main() {
 		if jsonFile != nil {
 			fmt.Println("error:", jsonFile)
 		}
-
+		//fmt.Println(string(responseData))
 		fmt.Println(stockVar[0].Symbol, stockVar[0].LastSalePrice, stockVar[0].LastUpdated)
-		time.Sleep(time.Millisecond * 10)
+		time.Sleep(time.Millisecond * 1)
 		i++
 		if i == 10 {
 			if j == 10 {
