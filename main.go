@@ -11,14 +11,14 @@ import (
 	"time"
 )
 
-//Structure for the stuct.
+//StockInfo struct.
 type StockInfo struct {
 	Symbol        string  `json:"symbol"`
 	LastSalePrice float32 `json:"lastSalePrice"`
 	LastUpdated   int64   `json:"lastUpdated"`
 }
 
-//Structure fot the stock info.
+//Stocks struck for the stock info.
 type Stocks []StockInfo
 
 func main() {
